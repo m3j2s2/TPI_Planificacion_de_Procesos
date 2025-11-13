@@ -1,0 +1,12 @@
+si estas en Windows, ir  a dist y presiona el .exe
+
+si estas en mac y tienes python, escribir en la terminal 
+
+pip install pyinstaller
+pyinstaller SimuladorPlanificacion.spec
+xattr -cr dist/SimuladorPlanificacion.app
+
+para Linux usar el Dockerfile con los siguientes comandos
+docker build -t interfaz-tk .
+xhost +local:docker
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix interfaz-tk

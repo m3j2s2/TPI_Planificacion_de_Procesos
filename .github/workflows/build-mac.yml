@@ -1,0 +1,40 @@
+name: Build macOS App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller matplotlib
+    
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller SimuladorPlanificacion.spec
+        xattr -cr dist/SimuladorPlanificacion.app
+    
+    - name: Create ZIP
+      run: |
+        cd dist
+        zip -r SimuladorPlanificacion-macOS.zip SimuladorPlanificacion.app
+        cd ..
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SimuladorPlanificacion-macOS
+        path: dist/SimuladorPlanificacion-macOS.zip
